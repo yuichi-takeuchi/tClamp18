@@ -1,5 +1,5 @@
 # tClamp18
-tClamp18 offers a series of Igor Pro GUIs for data acquision via an InstruTECH ITC-18 AD/DA board. tClampt18 is optimized for whole-cell patch-clamp recordings in both voltage-clamp and current-clamp modes but it can be used for general data acquision purposes as well. tClamp18 also offers a quite flexible setting ablity harnessing 8 ADCs and 4 DACs with usefull template. Thus, it is an ideal solution for simultaneous multi-cellular whole-cell recordings with several patch-clamp amplifiers (Axon, HEKA, Werner, DAGAN, Nihon Kohden etc.). It also has a quite virsatile stimulus ability with a virtual 4 channel stimulator and internal timer for timing and with any waveforms.
+tClamp18 offers a series of Igor Pro GUIs for data acquision via an InstruTECH ITC-18 AD/DA board. tClampt18 is optimized for whole-cell patch-clamp recordings in both voltage-clamp and current-clamp modes but it can be used for general data acquision purposes as well. tClamp18 also offers a quite flexible setting ablity harnessing 8 ADCs and 4 DACs with usefull setting file templates. Thus, tClamp18 is an ideal solution for simultaneous multi-cellular whole-cell recordings with several patch-clamp amplifiers of different manufactures (Axon, HEKA, Werner, DAGAN, Nihon Kohden etc.). tClamp18 also has a quite virsatile stimulus ability with a virtual 4 channel stimulator and internal timer for timing and with any waveforms.
 
 ## Getting Started
 
@@ -7,41 +7,55 @@ tClamp18 offers a series of Igor Pro GUIs for data acquision via an InstruTECH I
 * IGOR Pro 6 (https://www.wavemetrics.com/)
 * InstruTECH ITC-18 and a host interface (http://www.heka.com/products/products_main.html#acq_itc18)
 * Driver software of ITC-18 (http://www.heka.com/downloads/downloads_main.html#down_acq)
-* ITC-18 legacy XOP for Igor Pro 6.x (ITC18_X86_V76.XOP) (http://www.heka.com/downloads/downloads_main.html#down_xops)
+* ITC-18 XOP for Igor Pro 6.x (ITC18_X86_V76.XOP) (http://www.heka.com/downloads/downloads_main.html#down_xops)
 
-### Test
 This code has been tested in Igor Pro version 6.3.7.2. for Windows and supposed to work in Igor Pro 6.1 or later.
 This code is supposed to work for Windows Vista, 7, 8, 10 and Mac X also, but tested only in Windows XP and 7.
-This code is supposed to work any host interfaces (PCI-18, PCI-18V3, or USB-18), but tested only with USB-18.
+This code is supposed to work any host interfaces (PCI-18, PCI-18V3, or USB-18), but has been tested only with USB-18.
 
 ### Installing
 #### Hardware
-1. 
+under construction
 
 #### Software
-1. 
+under construction
 
-### How to use 
-#### Setting of input and output gains with any amplifiers
-* 
-
-#### Setting of oscilloscope (OSC) protocols: stimulus and recording settings
-
-#### Seal test
-1. 
+### Validation with sample setting files
 
 
-#### Voltage-clamp recordings
-0. 
+## How to use 
+### Setting of input and output gains with any amplifiers
+* under construction
+* examples
 
-#### Current-clamp recordings
-0. 
+### Setting of oscilloscope (OSC) protocols: stimulus and recording settings
+* under construction
+* examples
 
-#### Save recordings
-* 
+### Seal test
+* under construction
+
+### Voltage-clamp recordings
+* under construction
+
+### Current-clamp recordings
+* under construction
+
+### Saving your recordings
+* under construction
 
 ### Help
-* 
+* Click "Help" in tClamp18 menu.
+
+## Templates of setting files
+### Setting examples
+
+## Examples
+### 
+
+### Oscilloscope (OSC) protocol examples
+
+### Stimulator protocol examples
 
 ## DOI
 
@@ -62,7 +76,6 @@ This project is licensed under the MIT License.
 ## Acknowledgments
 * Department of Physiology, Tokyo Women's Medical University, Tokyo, Japan
 * Department of Information Physiology, National Institute for Physiological Sciences, Okazaki, Japan
-
 
 ## References
 tClamp18 has been used for the following works:
