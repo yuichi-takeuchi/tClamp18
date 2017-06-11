@@ -1,18 +1,35 @@
 #pragma rtGlobals = 1		// Use modern global access method.
-#pragma version = 1.00	//by Yuichi Takeuchi 100921
-#pragma IgorVersion = 6.0	//Igor Pro 6.0 or later
-///////////////////////////////////////////////////////////////
-//This procedure needs the InstruTECH ITC-18 XOP from http://www.heka.com/downloads/downloads_main.html#down_xops
-///////////////////////////////////////////////////////////////
+#pragma version = 1.0.0	
+#pragma IgorVersion = 6.1	//Igor Pro 6.1 or later
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// This procedure (tClamp18) offers a GUI for data acquisition via InstruTECH ITC-18.
+// The GUI is optimized for whole-cell patch-clamp recordings but can be used for other purposes.
+// The latest version is available at Github (https://github.com/yuichi-takeuchi/tClamp18).
+//
+// Prerequisites:
+// * Igor Pro 6.1 or later
+// * InstruTECH ITC-18 and a host interface
+// (http://www.heka.com/products/products_main.html#acq_itc18)
+// * ITC-18 legacy XOP for Igor Pro 6.x (ITC18_X86_V76.XOP)
+// (http://www.heka.com/downloads/downloads_main.html#down_xops)
+//
+// Author:
+// Yuichi Takeuchi PhD
+// Department of Physiology, University of Szeged, Hungary
+// Email: yuichi-takeuchi@umin.net
+// 
+// Lisence:
+// MIT License
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Menu "tClamp18"
-	SubMenu "Oscillo Protocol"
+	SubMenu "DAC ADC Settings"
 	End
-	SubMenu "Stimulator Protocol"
+	SubMenu "Oscillo Protocols"
 	End
-	SubMenu "Setting"
+	SubMenu "Stimulator Protocols"
 	End
-
 "-"
 	SubMenu "Initialize"
 		"tClampInitialize", tClamp18Main()
@@ -245,152 +262,12 @@ Function tClamp18_KillAllWindows()
 	endFor
 end
 
-Function tClamp18OSCProtocolTemplate()
-	NewNotebook/F=0
-
-	String strproc = ""
-	strproc += "// Protocol Template" + "\r"
-	strproc += "" + "\r"
-	strproc += "Menu \"tClamp\"" + "\r"
-	strproc += "	SubMenu \"Protocol\"" + "\r"
-	strproc += "\"any name of protocol\", tClampSetParamProtocolX() // any name of setting protocol" + "\r"
-	strproc += "	End" + "\r"
-	strproc += "End" + "\r"
-	strproc += "" + "\r"
-	strproc += "Function tClampSetParamProtocolX() 					//any name of setting protocol" + "\r"
-	strproc += "	tClamp18_FolderCheck()" + "\r"
-	strproc += "	String fldrSav0= GetDataFolder(1)" + "\r"
-	strproc += "	SetDataFolder root:Packages:tClamp18" + "\r"
-	strproc += "" + "\r"
-	strproc += "	String/G SelectedProtocol = \"protocol label X()\"	// any name of protocol" + "\r"
-	strproc += "	String/G StrITC18SeqDAC = \"0\"				// must be same length" + "\r"
-	strproc += "	String/G StrITC18SeqADC = \"0\"" + "\r"
-	strproc += "	Variable/G RecordingCheckADC0 = 0			//Select recording channels" + "\r"
-	strproc += "	Variable/G RecordingCheckADC1 = 0" + "\r"
-	strproc += "	Variable/G RecordingCheckADC2 = 0" + "\r"
-	strproc += "	Variable/G RecordingCheckADC3 = 0" + "\r"
-	strproc += "	Variable/G RecordingCheckADC4 = 0" + "\r"
-	strproc += "	Variable/G RecordingCheckADC5 = 0" + "\r"
-	strproc += "	Variable/G RecordingCheckADC6 = 0" + "\r"
-	strproc += "	Variable/G RecordingCheckADC7 = 0" + "\r"
-	strproc += "	Variable/G OscilloCmdPulse0 = 0.25			//Command output" + "\r"
-	strproc += "	Variable/G OscilloCmdPulse1 = 0.25" + "\r"
-	strproc += "	Variable/G OscilloCmdPulse2 = 0.25" + "\r"
-	strproc += "	Variable/G OscilloCmdPulse3 = 0.25" + "\r"
-	strproc += "	Variable/G OscilloCmdPulse4 = 0.25" + "\r"
-	strproc += "	Variable/G OscilloCmdPulse5 = 0.25" + "\r"
-	strproc += "	Variable/G OscilloCmdPulse6 = 0.25" + "\r"
-	strproc += "	Variable/G OscilloCmdPulse7 = 0.25" + "\r"
-	strproc += "	Variable/G OscilloCounterLimit = 0				//Sweep number" + "\r"
-	strproc += "	Variable/G OscilloSamplingNpnts = 1024 			//Number of Sampling Points at each channel" + "\r"
-	strproc += "	Variable/G OscilloITC18ExtTrig = 0				//0: off, 1: on" + "\r"
-	strproc += "	Variable/G OscilloITC18Output = 1				//0: off, 1: on" + "\r"
-	strproc += "	Variable/G OscilloITC18Overflow = 1				//0: " + "\r"
-	strproc += "	Variable/G OscilloITC18Reserved = 1			// Reserved" + "\r"
-	strproc += "	Variable/G OscilloITC18Period = 4				// must be between 4 and 65535. Each sampling tick is 1.25 micro sec." + "\r"
-	strproc += "" + "\r"
-	strproc += "	///////////////////////" + "\r"
-	strproc += "	//Protocol-Specific parameters and procedures are here" + "\r"
-	strproc += "	///////////////////////" + "\r"
-	strproc += "" + "\r"
-	strproc += "	tClamp18ApplyProtocolSetting()" + "\r"
-	strproc += "" + "\r"
-	strproc += "	SetDataFolder fldrSav0" + "\r"
-	strproc += "end" + "\r"
-	strproc += "" + "\r"
-	strproc += "Function tClampAcquisitionProcX() //same as StrAcquisitionProcName and SelectedProtocol" + "\r"
-	strproc += "	NVAR bit = root:Packages:tClamp18:RecordingBit" + "\r"
-	strproc += "" + "\r"
-	strproc += "	// Specific global variables here" + "\r"
-	strproc += "" + "\r"
-	strproc += "	Variable i = 0" + "\r"
-	strproc += "	For(i = 0; i < 8; i += 1)" + "\r"
-	strproc += "		If(bit & 2^i)" + "\r"
-	strproc += "			Wave OscilloADC = $(\"root:Packages:tClamp18:OscilloADC\" + Num2str(i))" + "\r"
-	strproc += "			NVAR OscilloCmdPulse = $(\"root:Packages:tClamp18:OscilloCmdPulse\" + Num2str(i))		//" + "\r"
-	strproc += "			NVAR OscilloCmdOnOff = $(\"root:Packages:tClamp18:OscilloCmdOnOff\" + Num2str(i))		//" + "\r"
-	strproc += "" + "\r"
-	strproc += "			If(OscilloCmdOnOff)" + "\r"
-	strproc += "				OscilloADC[0, ] = OscilloCmdPulse	// create DAC output data in volt" + "\r"
-	strproc += "				OscilloADC *= 3200										// scale into point" + "\r"
-	strproc += "			else" + "\r"
-	strproc += "				OscilloADC[0, ] = 0" + "\r"
-	strproc += "				OscilloADC *= 3200" + "\r"
-	strproc += "			endif" + "\r"
-	strproc += "		endif" + "\r"
-	strproc += "	endFor" + "\r"
-	strproc += "" + "\r"
-	strproc += "	Wave DigitalOut1 = $\"root:Packages:tClamp18:DigitalOut1\"	//Output Wave for DigitalOut1" + "\r"
-	strproc += "	NVAR StimulatorCheck = root:Packages:tClamp18:StimulatorCheck" + "\r"
-	strproc += "" + "\r"
-	strproc += "	If(StimulatorCheck)" + "\r"
-	strproc += "		tClamp18UseStimulator()" + "\r"
-	strproc += "	else" + "\r"
-	strproc += "//		DigitalOut1 = 0" + "\r"
-	strproc += "	endIf" + "\r"
-	strproc += "end" + "\r"
-	strproc += "" + "\r"
-	Notebook $WinName(0, 16) selection={endOfFile, endOfFile}
-	Notebook $WinName(0, 16) text = strproc + "\r"
-end
-
-Function tClamp18StimProtocolTemplate()
-	NewNotebook/F=0
-
-	String strproc = ""
-	strproc += "// Stimulator Protocol Template" + "\r"
-	strproc += "Menu \"tClamp\"" + "\r"
-	strproc += "	SubMenu \"Stimulator Protocol\"" + "\r"
-	strproc += "\"any name\", tClampSetStim()" + "\r"
-	strproc += "	End" + "\r"
-	strproc += "End" + "\r"
-	strproc += "" + "\r"
-	strproc += "Function tClampSetStim()" + "\r"
-	strproc += "	tClamp18_FolderCheck()" + "\r"
-	strproc += "	String fldrSav0= GetDataFolder(1)" + "\r"
-	strproc += "	SetDataFolder root:Packages:tClamp18" + "\r"
-	strproc += "" + "\r"
-	strproc += "	Variable/G StimulatorCheck = 1" + "\r"
-	strproc += "" + "\r"
-	strproc += "	Variable/G StimulatorCounterLimit = 0" + "\r"
-	strproc += "	Variable/G StimulatorISI = 600" + "\r"
-	strproc += "	Variable/G StimulatorITC18Period = 4" + "\r"
-	strproc += "	Variable/G StimulatorSamplingNpnts = 200000" + "\r"
-	strproc += "" + "\r"
-	strproc += "	Variable/G StimulatorDelay0 = 0" + "\r"
-	strproc += "	Variable/G StimulatorInterval0 = 0" + "\r"
-	strproc += "	Variable/G StimulatorTrain0 = 0" + "\r"
-	strproc += "	Variable/G StimulatorDuration0 = 0" + "\r"
-	strproc += "" + "\r"
-	strproc += "	Variable/G StimulatorDelay1 = 0" + "\r"
-	strproc += "	Variable/G StimulatorInterval1 = 0" + "\r"
-	strproc += "	Variable/G StimulatorTrain1 = 0" + "\r"
-	strproc += "	Variable/G StimulatorDuration1 = 0" + "\r"
-	strproc += "" + "\r"
-	strproc += "	Variable/G StimulatorDelay2 = 0" + "\r"
-	strproc += "	Variable/G StimulatorInterval2 = 0" + "\r"
-	strproc += "	Variable/G StimulatorTrain2 = 0" + "\r"
-	strproc += "	Variable/G StimulatorDuration2 = 0" + "\r"
-	strproc += "" + "\r"
-	strproc += "	Variable/G StimulatorDelay3 = 0" + "\r"
-	strproc += "	Variable/G StimulatorInterval3 = 0" + "\r"
-	strproc += "	Variable/G StimulatorTrain3 = 0" + "\r"
-	strproc += "	Variable/G StimulatorDuration3 = 0" + "\r"
-	strproc += "" + "\r"
-	strproc += "	tClamp18ApplyStimulatorSetting()" + "\r"
-	strproc += "" + "\r"
-	strproc += "	SetDataFolder fldrSav0" + "\r"
-	strproc += "End" + "\r"
-	
-	Notebook $WinName(0, 16) selection={endOfFile, endOfFile}
-	Notebook $WinName(0, 16) text = strproc + "\r"
-end
-
 Function tClamp18SettingTemplate()
 	NewNotebook/F=0
 	String strset =""
-	strset += "Menu \"tClamp\""+"\r"
-	strset += "	SubMenu \"Setting\""+"\r"
+	strset += "// DAC ADC Setting Template" + "\r"
+	strset += "Menu \"tClamp18\""+"\r"
+	strset += "	SubMenu \"DAC ADC Settings\""+"\r"
 	strset += "\"Setting A\", tClampSettingTemplateA()"+"\r"
 	strset += "	End"+"\r"
 	strset += "End"+"\r"
@@ -610,7 +487,7 @@ Function tClamp18SettingTemplate()
 	strset += ""+"\r"	
 	strset += "	tClamp18SetChannelMode()"+"\r"	
 	strset += ""+"\r"	
-	strset += "	tClamp18PrepWindows(bitDAC, bitADC) // tClamp18PrepWindows(bitDAC, bitADC)"+"\r"	
+	strset += "	tClamp18PrepWindows(1, 1) // tClamp18PrepWindows(bitDAC, bitADC)"+"\r"	
 	strset += "	tClamp18MoveWinXXXX()"+"\r"	
 	strset += "	SetDataFolder fldrSav0"+"\r"
 	strset += "	tClamp18SetChannelMode()"+"\r"	
@@ -628,13 +505,154 @@ Function tClamp18SettingTemplate()
 	Notebook $WinName(0, 16) text = strset + "\r"
 end
 
+Function tClamp18OSCProtocolTemplate()
+	NewNotebook/F=0
+
+	String strproc = ""
+	strproc += "// Oscillo Protocol Template" + "\r"
+	strproc += "" + "\r"
+	strproc += "Menu \"tClamp18\"" + "\r"
+	strproc += "	SubMenu \"Oscillo Protocols\"" + "\r"
+	strproc += "\"any name of protocol\", tClampSetParamProtocolX() // any name of setting protocol" + "\r"
+	strproc += "	End" + "\r"
+	strproc += "End" + "\r"
+	strproc += "" + "\r"
+	strproc += "Function tClampSetParamProtocolX() 					//any name of setting protocol" + "\r"
+	strproc += "	tClamp18_FolderCheck()" + "\r"
+	strproc += "	String fldrSav0= GetDataFolder(1)" + "\r"
+	strproc += "	SetDataFolder root:Packages:tClamp18" + "\r"
+	strproc += "" + "\r"
+	strproc += "	String/G SelectedProtocol = \"protocol label X()\"	// any name of protocol" + "\r"
+	strproc += "	String/G StrITC18SeqDAC = \"0\"				// must be same length" + "\r"
+	strproc += "	String/G StrITC18SeqADC = \"0\"" + "\r"
+	strproc += "	Variable/G RecordingCheckADC0 = 0			//Select recording channels" + "\r"
+	strproc += "	Variable/G RecordingCheckADC1 = 0" + "\r"
+	strproc += "	Variable/G RecordingCheckADC2 = 0" + "\r"
+	strproc += "	Variable/G RecordingCheckADC3 = 0" + "\r"
+	strproc += "	Variable/G RecordingCheckADC4 = 0" + "\r"
+	strproc += "	Variable/G RecordingCheckADC5 = 0" + "\r"
+	strproc += "	Variable/G RecordingCheckADC6 = 0" + "\r"
+	strproc += "	Variable/G RecordingCheckADC7 = 0" + "\r"
+	strproc += "	Variable/G OscilloCmdPulse0 = 0.25			//Command output" + "\r"
+	strproc += "	Variable/G OscilloCmdPulse1 = 0.25" + "\r"
+	strproc += "	Variable/G OscilloCmdPulse2 = 0.25" + "\r"
+	strproc += "	Variable/G OscilloCmdPulse3 = 0.25" + "\r"
+	strproc += "	Variable/G OscilloCmdPulse4 = 0.25" + "\r"
+	strproc += "	Variable/G OscilloCmdPulse5 = 0.25" + "\r"
+	strproc += "	Variable/G OscilloCmdPulse6 = 0.25" + "\r"
+	strproc += "	Variable/G OscilloCmdPulse7 = 0.25" + "\r"
+	strproc += "	Variable/G OscilloCounterLimit = 0				//Sweep number" + "\r"
+	strproc += "	Variable/G OscilloSamplingNpnts = 1024 			//Number of Sampling Points at each channel" + "\r"
+	strproc += "	Variable/G OscilloITC18ExtTrig = 0				//0: off, 1: on" + "\r"
+	strproc += "	Variable/G OscilloITC18Output = 1				//0: off, 1: on" + "\r"
+	strproc += "	Variable/G OscilloITC18Overflow = 1				//0: " + "\r"
+	strproc += "	Variable/G OscilloITC18Reserved = 1			// Reserved" + "\r"
+	strproc += "	Variable/G OscilloITC18Period = 4				// must be between 4 and 65535. Each sampling tick is 1.25 micro sec." + "\r"
+	strproc += "" + "\r"
+	strproc += "	///////////////////////" + "\r"
+	strproc += "	//Protocol-Specific parameters and procedures are here" + "\r"
+	strproc += "	///////////////////////" + "\r"
+	strproc += "" + "\r"
+	strproc += "	tClamp18ApplyProtocolSetting()" + "\r"
+	strproc += "" + "\r"
+	strproc += "	SetDataFolder fldrSav0" + "\r"
+	strproc += "end" + "\r"
+	strproc += "" + "\r"
+	strproc += "Function tClampAcquisitionProcX() //same as StrAcquisitionProcName and SelectedProtocol" + "\r"
+	strproc += "	NVAR bit = root:Packages:tClamp18:RecordingBit" + "\r"
+	strproc += "" + "\r"
+	strproc += "	// Specific global variables here" + "\r"
+	strproc += "" + "\r"
+	strproc += "	Variable i = 0" + "\r"
+	strproc += "	For(i = 0; i < 8; i += 1)" + "\r"
+	strproc += "		If(bit & 2^i)" + "\r"
+	strproc += "			Wave OscilloADC = $(\"root:Packages:tClamp18:OscilloADC\" + Num2str(i))" + "\r"
+	strproc += "			NVAR OscilloCmdPulse = $(\"root:Packages:tClamp18:OscilloCmdPulse\" + Num2str(i))		//" + "\r"
+	strproc += "			NVAR OscilloCmdOnOff = $(\"root:Packages:tClamp18:OscilloCmdOnOff\" + Num2str(i))		//" + "\r"
+	strproc += "" + "\r"
+	strproc += "			If(OscilloCmdOnOff)" + "\r"
+	strproc += "				OscilloADC[0, ] = OscilloCmdPulse	// create DAC output data in volt" + "\r"
+	strproc += "				OscilloADC *= 3200										// scale into point" + "\r"
+	strproc += "			else" + "\r"
+	strproc += "				OscilloADC[0, ] = 0" + "\r"
+	strproc += "				OscilloADC *= 3200" + "\r"
+	strproc += "			endif" + "\r"
+	strproc += "		endif" + "\r"
+	strproc += "	endFor" + "\r"
+	strproc += "" + "\r"
+	strproc += "	Wave DigitalOut1 = $\"root:Packages:tClamp18:DigitalOut1\"	//Output Wave for DigitalOut1" + "\r"
+	strproc += "	NVAR StimulatorCheck = root:Packages:tClamp18:StimulatorCheck" + "\r"
+	strproc += "" + "\r"
+	strproc += "	If(StimulatorCheck)" + "\r"
+	strproc += "		tClamp18UseStimulator()" + "\r"
+	strproc += "	else" + "\r"
+	strproc += "//		DigitalOut1 = 0" + "\r"
+	strproc += "	endIf" + "\r"
+	strproc += "end" + "\r"
+	strproc += "" + "\r"
+	Notebook $WinName(0, 16) selection={endOfFile, endOfFile}
+	Notebook $WinName(0, 16) text = strproc + "\r"
+end
+
+Function tClamp18StimProtocolTemplate()
+	NewNotebook/F=0
+
+	String strproc = ""
+	strproc += "// Stimulator Protocol Template" + "\r"
+	strproc += "Menu \"tClamp18\"" + "\r"
+	strproc += "	SubMenu \"Stimulator Protocols\"" + "\r"
+	strproc += "\"any name\", tClampSetStim()" + "\r"
+	strproc += "	End" + "\r"
+	strproc += "End" + "\r"
+	strproc += "" + "\r"
+	strproc += "Function tClampSetStim()" + "\r"
+	strproc += "	tClamp18_FolderCheck()" + "\r"
+	strproc += "	String fldrSav0= GetDataFolder(1)" + "\r"
+	strproc += "	SetDataFolder root:Packages:tClamp18" + "\r"
+	strproc += "" + "\r"
+	strproc += "	Variable/G StimulatorCheck = 1" + "\r"
+	strproc += "" + "\r"
+	strproc += "	Variable/G StimulatorCounterLimit = 0" + "\r"
+	strproc += "	Variable/G StimulatorISI = 600" + "\r"
+	strproc += "	Variable/G StimulatorITC18Period = 4" + "\r"
+	strproc += "	Variable/G StimulatorSamplingNpnts = 200000" + "\r"
+	strproc += "" + "\r"
+	strproc += "	Variable/G StimulatorDelay0 = 0" + "\r"
+	strproc += "	Variable/G StimulatorInterval0 = 0" + "\r"
+	strproc += "	Variable/G StimulatorTrain0 = 0" + "\r"
+	strproc += "	Variable/G StimulatorDuration0 = 0" + "\r"
+	strproc += "" + "\r"
+	strproc += "	Variable/G StimulatorDelay1 = 0" + "\r"
+	strproc += "	Variable/G StimulatorInterval1 = 0" + "\r"
+	strproc += "	Variable/G StimulatorTrain1 = 0" + "\r"
+	strproc += "	Variable/G StimulatorDuration1 = 0" + "\r"
+	strproc += "" + "\r"
+	strproc += "	Variable/G StimulatorDelay2 = 0" + "\r"
+	strproc += "	Variable/G StimulatorInterval2 = 0" + "\r"
+	strproc += "	Variable/G StimulatorTrain2 = 0" + "\r"
+	strproc += "	Variable/G StimulatorDuration2 = 0" + "\r"
+	strproc += "" + "\r"
+	strproc += "	Variable/G StimulatorDelay3 = 0" + "\r"
+	strproc += "	Variable/G StimulatorInterval3 = 0" + "\r"
+	strproc += "	Variable/G StimulatorTrain3 = 0" + "\r"
+	strproc += "	Variable/G StimulatorDuration3 = 0" + "\r"
+	strproc += "" + "\r"
+	strproc += "	tClamp18ApplyStimulatorSetting()" + "\r"
+	strproc += "" + "\r"
+	strproc += "	SetDataFolder fldrSav0" + "\r"
+	strproc += "End" + "\r"
+	
+	Notebook $WinName(0, 16) selection={endOfFile, endOfFile}
+	Notebook $WinName(0, 16) text = strproc + "\r"
+end
+
 Function  tClamp18HelpNote()
 	NewNotebook/F=0
 	String strhelp =""
-	strhelp += "0. Click tClampInitialize						(Menu -> tClamp -> Initialize -> tClampInitialize)"+"\r"
-	strhelp += "1. Select setting.ipf				 			(Menu -> tClamp -> Setting -> any setting)"+"\r"
-	strhelp += "2. Select oscillo protocol.ipf		 			(Menu -> tClamp -> Oscillo Protocol)"+"\r"
-	strhelp += "3. If you need it, select stimulator protocol.ipf 	(Menu -> tClamp -> Stimulator Protocol)"+"\r"
+	strhelp += "0. Click tClampInitialize						(Menu -> tClamp18 -> Initialize -> tClampInitialize)"+"\r"
+	strhelp += "1. Select setting.ipf				 			(Menu -> tClamp18 -> Setting -> any setting)"+"\r"
+	strhelp += "2. Select oscillo protocol.ipf		 			(Menu -> tClamp18 -> Oscillo Protocol)"+"\r"
+	strhelp += "3. If you need it, select stimulator protocol.ipf 	(Menu -> tClamp18 -> Stimulator Protocol)"+"\r"
 	strhelp += ""+"\r"
 	strhelp += ""+"\r"
 	strhelp += ""+"\r"
