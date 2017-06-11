@@ -69,12 +69,13 @@ Select "StimTTLPrep" in Macros menu.
 * Click "Help" in tClamp18 menu.
 
 ## DOI
+[![DOI](https://zenodo.org/badge/93522654.svg)](https://zenodo.org/badge/latestdoi/93522654)
 
 ## Versioning
 We use [SemVer](http://semver.org/) for versioning.
 
 ## Releases
-* Prerelease, 2017/06/06
+* Pre-release v0.1.0-alpha, 2017/06/10.
 
 ## Authors
 * **Yuichi Takeuchi PhD** - *Initial work* - [GitHub](https://github.com/yuichi-takeuchi)
