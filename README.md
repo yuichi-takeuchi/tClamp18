@@ -15,22 +15,43 @@ This code is supposed to work any host interfaces (PCI-18, PCI-18V3, or USB-18),
 
 ### Installing
 #### Hardware
-under construction
+* under construction
 
 #### Software
-under construction
-
-### Validation with sample setting files
-
-
-## How to use 
-### Setting of input and output gains with any amplifiers
 * under construction
+
+#### Test with demo files
+* under construction
+
+## How to setup your recording system with tClamp18
+### DAC ADC Settings: input and output gain settings for each channel
+* under construction
+* template
 * examples
 
-### Setting of oscilloscope (OSC) protocols: stimulus and recording settings
+### Oscilloscope (OSC) Protocols: stimulus and recording settings
 * under construction
+* template
 * examples
+
+### Stimulator Protocols: 
+* under construction
+* template
+* examples
+
+## Work flow
+### Initialize your experiment
+* Launch your Igor Pro.
+* Initialize tClamp18 by clicking "tClampInitialize" in Initialize submenu of tClamp18 menu.
+* Select a DAC ADC setting in tClamp18 menu.
+* Select a Oscillo Protocol in tClamp18 menu.
+* Select a Stimulator Protocol in tClamp menu, if you want to use it.
+
+#### Example of Initialization Macro
+It is very convenient if the above initialization processes are automated.
+* StimTTLPrep.ipf
+Select "StimTTLPrep" in Macros menu.
+* StimTTLPrep.ipf depends on tClamp18_SettingEPC7PLUS_700A.ipf, tClamp18_PairedPulseStimulation.ipf, tClamp18_E7PM7A_TTL_Stim.ipf files, which can be found in expample zips.
 
 ### Seal test
 * under construction
@@ -41,21 +62,11 @@ under construction
 ### Current-clamp recordings
 * under construction
 
-### Saving your recordings
+### Saving your waves and experiments
 * under construction
 
-### Help
+## Help
 * Click "Help" in tClamp18 menu.
-
-## Templates of setting files
-### Setting examples
-
-## Examples
-### 
-
-### Oscilloscope (OSC) protocol examples
-
-### Stimulator protocol examples
 
 ## DOI
 
