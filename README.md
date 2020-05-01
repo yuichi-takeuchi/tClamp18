@@ -4,7 +4,7 @@ tClamp18 offers a series of Igor Pro GUIs for data acquision via an InstruTECH I
 ## Getting Started
 
 ### Prerequisites
-* IGOR Pro 6 (https://www.wavemetrics.com/)
+* Igor Pro 6 (https://www.wavemetrics.com/)
 * InstruTECH ITC-18 and a host interface (http://www.heka.com/products/products_main.html#acq_itc18)
 * Driver software of ITC-18 (http://www.heka.com/downloads/downloads_main.html#down_acq)
 * ITC-18 XOP for Igor Pro 6.x (ITC18_X86_V76.XOP) (http://www.heka.com/downloads/downloads_main.html#down_xops)
@@ -80,7 +80,7 @@ We use [SemVer](http://semver.org/) for versioning.
 ## Authors
 * **Yuichi Takeuchi PhD** - *Initial work* - [GitHub](https://github.com/yuichi-takeuchi)
 * Affiliation: Department of Physiology, University of Szeged, Hungary
-* E-mail: yuichi-takeuchi@umin.net
+* E-mail: takeuchi.yuichi@med.u-szeged.hu
 
 ## License
 This project is licensed under the MIT License.
